@@ -1,73 +1,118 @@
-# PopTools 插件
+# PopTools for Blender
 
-## 概述
-PopTools是一个强大的Blender工具集插件，整合了多个实用工具，包括批量网格导出器和ReTex纹理工具。
+**版本:** 2.1.0
 
-## 当前状态
-目前已经完成了基础框架的搭建，但还需要完成以下工作：
+**作者:** Muton & Claude3.7 & Gemini0506
 
-## 完成整合的步骤
+**Blender 版本:** 4.2+
 
-### 1. 完成导出模块的迁移
-已经创建了以下文件：
-- `__init__.py` - 主插件文件，负责模块的注册和卸载
-- `modules/exporter/__init__.py` - 导出模块的初始化文件
-- `modules/exporter/properties.py` - 导出模块的属性定义
+**位置:** 3D视图 > 侧边栏 > PopTools 标签页
 
-还需要创建以下文件：
-- `modules/exporter/operators.py` - 从EasyMesh Batch Exporter迁移操作符代码
-- `modules/exporter/panels.py` - 从EasyMesh Batch Exporter迁移面板代码
-- `modules/exporter/indicators.py` - 从EasyMesh Batch Exporter迁移导出指示器代码
+## 描述
 
-### 2. 修改面板结构
-需要修改面板代码，使其显示在PopTools选项卡下，而不是原来的Exporter选项卡。
+PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观的工具来优化您的工作流程。该插件目前包含以下功能：
 
-```python
-# 原始代码
-class MESH_PT_exporter_panel(Panel):
-    bl_label = "EasyMesh Batch Exporter"
-    bl_idname = "MESH_PT_exporter_panel"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Exporter" # 需要修改为 "PopTools"
-```
+*   **网格导出器:** 批量导出网格，包含LOD(细节级别)生成和导出指示器等高级选项
+*   **ReTex 模块:** 一套高效的纹理和对象管理工具，包括：
+    *   **智能对象重命名:** 基于预定义规则和自定义前缀(如 `mesh_item_[ItemLand]_[type]_[number]`)智能重命名对象
+    *   **纹理重命名:** 
+        *   根据对象名称设置纹理名称
+        *   批量替换所有纹理名称，可选择添加 `tex_` 前缀
+    *   **纹理调整大小:** 将选定纹理调整为预设分辨率(128x128, 256x256, 512x512, 1024x1024)并自动保存到"Small"子文件夹
+    *   **角色重命名:** 根据体型(Man, Woman, Fatman, Fatwoman, Kid 和自定义类型)和序列号重命名选定角色模型(身体和头发)。格式：
+        *   身体: `mesh_characters_[body_type]_[serial_number]`
+        *   头发: `mesh_head_[body_type]_head[serial_number]`
+    *   **动物重命名:** 根据预设体型(Bird, Pigeon, Cow)和序列号重命名选定动物模型。格式: `mesh_special_[animal_body_type]_[serial_number]`
 
-### 3. 整合ReTex功能
-创建ReTex模块的结构：
-- `modules/retex/__init__.py`
-- `modules/retex/properties.py`
-- `modules/retex/operators.py`
-- `modules/retex/panels.py`
+## 功能
 
-### 4. 文件编码和中文支持
-所有文件都应使用UTF-8编码，以确保中文注释不会出现乱码。已经在properties.py中将UI元素翻译为中文。
+### 1. 网格导出器
 
-### 5. 测试和调试
-完成代码迁移后，需要测试插件的功能，确保所有功能正常工作。
+*   **批量导出:** 一次性导出多个选定对象
+*   **多种格式:** 支持各种常见网格格式
+*   **LOD生成:** 自动为网格创建细节级别以优化性能
+*   **导出指示器:** 导出过程中的视觉反馈
 
-## 文件结构
-完成后的插件结构应如下：
+### 2. ReTex - 纹理重命名工具
 
-```
-PopTools/
-├── __init__.py
-├── README.md
-├── modules/
-│   ├── exporter/
-│   │   ├── __init__.py
-│   │   ├── properties.py
-│   │   ├── operators.py
-│   │   ├── panels.py
-│   │   └── indicators.py
-│   └── retex/
-│       ├── __init__.py
-│       ├── properties.py
-│       ├── operators.py
-│       └── panels.py
-```
+*   **直观UI:** 所有ReTex工具都位于3D视图侧边栏的"PopTools"标签页中
+*   **智能对象重命名:**
+    *   为项目定义"ItemLand"前缀
+    *   使用对象名称中的类型标识符(b: 气球, h: 手, p: 部件, c: 帽子)进行结构化命名
+*   **灵活的纹理命名:**
+    *   自动重命名与选定对象链接的纹理文件
+    *   可选择为所有纹理强制添加 `tex_` 前缀
+*   **高效的纹理调整大小:**
+    *   快速缩小纹理以优化性能
+    *   自动将调整大小的纹理组织到"Small"子目录中，保留原始文件
+*   **组织化的角色和动物命名:**
+    *   角色和动物资源的标准化命名约定
+    *   轻松选择预设或自定义体型
+    *   自动序列编号以实现唯一标识
 
-## 注意事项
-1. 确保所有导入路径正确，特别是在从原始插件迁移代码时
-2. 保持模块化结构，便于后续添加更多工具
-3. 使用UTF-8编码，确保中文显示正常
-4. 在Blender 4.2中测试所有功能
+## 安装
+
+1.  下载 `PopTools.zip` 文件(或整个插件文件夹)
+2.  在Blender中，转到 `编辑 > 首选项 > 插件`
+3.  点击 `安装...` 并导航到下载的 `.zip` 文件或PopTools文件夹中的 `__init__.py`
+4.  勾选"PopTools"插件名称旁边的复选框以启用插件
+
+## 使用方法
+
+1.  打开Blender并确保PopTools插件已启用
+2.  在3D视图中，按 `N` 键打开侧边栏
+3.  找到"PopTools"标签页
+
+### 网格导出器
+
+*   选择要导出的对象
+*   在导出器面板中配置导出设置(格式、LOD、路径)
+*   点击导出按钮
+
+### ReTex模块
+
+*   **智能对象重命名:**
+    1.  输入您想要的"海岛名"(ItemLand前缀)
+    2.  确保您的对象名称包含类型标识符(如 `my_balloon_01`, `item_h_02`)
+    3.  选择对象
+    4.  点击"重命名选中物体"
+*   **纹理重命名:**
+    1.  根据对象名称重命名纹理: 选择对象，可选勾选"替换为'tex'前缀"，然后点击"设置对象的纹理名称"
+    2.  重命名场景中的所有纹理: 可选勾选"替换为'tex'前缀"，然后点击"替换所有纹理"
+*   **纹理调整大小:**
+    1.  选择要调整纹理大小的对象
+    2.  从下拉菜单中选择"大小"预设
+    3.  点击"调整纹理大小"
+*   **角色重命名:**
+    1.  选择角色网格(身体或头发)
+    2.  在"角色重命名"部分，选择"体型"并输入"序号"
+    3.  点击"命名选中体型"或"命名选中发型"
+*   **动物重命名:**
+    1.  选择动物网格
+    2.  在"动物重命名"部分，选择"体型"并输入"序号"
+    3.  点击"命名选中动物"
+
+## 更新日志
+
+*   **v2.1.0 (当前版本):**
+    *   新增"动物重命名"功能，包含预设(bird, pigeon, cow)和命名格式 `mesh_special_[body_type]_[serial_number]`
+    *   更新GitHub的README
+*   **v2.0.0:**
+    *   整合ReTex模块，包含角色重命名、纹理管理和智能对象重命名
+    *   模块化插件结构
+*   **v1.x.x:**
+    *   初始网格导出器功能
+
+## 未来计划
+
+*   更高级的纹理操作工具
+*   导出器的进一步改进
+*   用户请求的功能
+
+## 贡献
+
+欢迎fork仓库、进行改进并提交pull request。也可以通过GitHub Issues提交错误报告和功能建议。
+
+---
+
+感谢使用PopTools!
