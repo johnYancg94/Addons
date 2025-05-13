@@ -9,7 +9,7 @@ This addon combines multiple tools including:
 
 bl_info = {
     "name": "PopTools",
-    "author": "JhonYan",
+    "author": "JhonYan & Claude & Gemini",
     "version": (2, 1, 0),
     "blender": (4, 2, 0),
     "location": "View3D > Sidebar > PopTools Tab",

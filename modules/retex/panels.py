@@ -109,7 +109,7 @@ class RT_PT_TextureRenamerPanel(Panel):
         
         # 添加同步纹理命名按钮
         row = char_box.row(align=True)
-        row.operator("rt.sync_texture_names", text="同步选择模型纹理命名", icon='FILE_REFRESH')
+        row.operator("rt.sync_texture_names", text="同步选中模型纹理命名", icon='FILE_REFRESH')
 
         # 添加动物重命名部分
         layout.separator()
@@ -140,7 +140,7 @@ class RT_PT_TextureRenamerPanel(Panel):
 
 # 定义3DCoat整理面板类
 class RT_PT_3DCoatPanel(Panel):
-    bl_label = "导出3DCoat整理"
+    bl_label = "导出3DCoat前整理"
     bl_idname = "RT_PT_3DCoatPanel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
