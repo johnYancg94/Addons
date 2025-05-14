@@ -1,6 +1,6 @@
 # PopTools for Blender
 
-**版本:** 2.1.0
+**版本:** 2.2.0
 
 **作者:** Muton & Claude3.7 & Gemini
 
@@ -117,7 +117,9 @@ PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观�
 
 ## 更新日志
 
-*   **v2.1.0 (当前版本):**
+*   **v2.2.0 :**
+    *   修复bug
+*   **v2.1.0 :**
     *   新增"动物重命名"功能，包含预设 (Bird, Pigeon, Cow) 和命名格式 `mesh_special_[body_type]_[serial_number]`。
     *   新增"3Dcoat导出"功能，优化UV布局和材质通道，简化向3Dcoat的导出流程。
     *   更新GitHub的README，提供更详细的功能说明和使用指南。

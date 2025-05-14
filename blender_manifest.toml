@@ -1,0 +1,46 @@
+schema_version = "1.0.0"
+
+id = "easymesh_batch_exporter"
+version = "1.0.4"
+name = "EasyMesh Batch Exporter"
+tagline = "Batch export meshes with LODs, triangulation, and naming"
+maintainer = "Bradley Walker"
+type = "add-on"
+
+# Optional: Add URL to GitHub repo or documentation if available
+website = "https://github.com/speculative-artefact/easymesh_batch_exporter/releases"
+
+tags = [
+  "Import-Export"
+]
+
+blender_version_min = "4.2.0"
+# blender_version_max = "5.1.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2025 Bradley Walker"
+]
+
+# wheels = []
+
+# Declare necessary permissions
+[permissions]
+files = "Export mesh files to the specified directory"
+
+# [build]
+# paths_exclude_pattern = []
+
+[features]
+workspace = true
+ui = true
+export = true
+import = false
+render = false
+object = true
+mesh = true
+sculpt = false
+texture = false
+animation = false
