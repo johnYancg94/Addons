@@ -73,12 +73,6 @@ def init_properties():
         default="01"
     )
 
-    bpy.types.Scene.rt_character_suffix = StringProperty(
-        name="后缀",
-        description="添加角色后缀,为空则不添加",
-        default=""
-    )
-
     # 动物重命名属性
     animal_body_type_items = [
         ('bird', '鸟类', '鸟类'),
@@ -98,19 +92,6 @@ def init_properties():
         description="输入动物序号",
         default="01"
     )
-    
-    # UV检查相关属性
-    bpy.types.Scene.rt_uv_check_triggered = BoolProperty(
-        name="UV检查已触发",
-        description="标记UV检查是否已执行",
-        default=False
-    )
-    
-    bpy.types.Scene.rt_uv_check_results = StringProperty(
-        name="UV检查结果",
-        description="存储UV检查的结果信息",
-        default=""
-    )
 
 # 清除属性
 def clear_properties():
@@ -119,14 +100,10 @@ def clear_properties():
     del bpy.types.Scene.rt_item_land
     del bpy.types.Scene.rt_character_body_type
     del bpy.types.Scene.rt_character_serial_number
-    del bpy.types.Scene.rt_character_suffix
     del bpy.types.Scene.rt_custom_body_types
     # 清除动物重命名属性
     del bpy.types.Scene.rt_animal_body_type
     del bpy.types.Scene.rt_animal_serial_number
-    # 清除UV检查相关属性
-    del bpy.types.Scene.rt_uv_check_triggered
-    del bpy.types.Scene.rt_uv_check_results
 
 # 注册函数
 def register():

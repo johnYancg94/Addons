@@ -1,6 +1,6 @@
 # PopTools for Blender
 
-**版本:** 2.3.0
+**版本:** 2.1.0
 
 **作者:** Muton & Claude3.7 & Gemini
 
@@ -24,8 +24,6 @@ PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观�
         *   身体: `mesh_characters_[body_type]_[serial_number]`
         *   头发: `mesh_head_[body_type]_head[serial_number]`
     *   **动物重命名:** 根据预设体型 (Bird, Pigeon, Cow) 和序列号重命名选定动物模型。格式: `mesh_special_[animal_body_type]_[serial_number]`
-    *   **一键标注:** 快速为选定对象添加标注。
-    *   **清理标注:** 移除选定对象上的所有标注。
 
 ## 功能
 
@@ -63,12 +61,6 @@ PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观�
     *   为动物模型提供标准化的命名约定。
     *   预设体型包括 Bird, Pigeon, Cow，并支持自定义输入。
     *   自动序列编号，确保命名唯一性。
-*   **一键标注:**
-    *   简化为对象添加标注的过程。
-    *   支持批量操作。
-*   **清理标注:**
-    *   快速移除对象上的标注。
-    *   支持批量操作。
 
 ## 安装
 
@@ -90,6 +82,12 @@ PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观�
 3.  设置导出路径。
 4.  点击"导出选中项"按钮。
 
+### 3Dcoat导出
+
+1.  选择要导出到3Dcoat的对象。
+2.  在"3Dcoat导出"面板中，根据需要调整UV和材质相关选项。
+3.  设置导出路径。
+4.  点击"导出到3DCoat"按钮 (具体按钮名称以插件为准)。
 
 ### ReTex模块
 
@@ -125,12 +123,7 @@ PopTools 是一个全面的 Blender 插件，旨在通过一系列强大直观�
 
 ## 更新日志
 
-*   **v2.4.0 :**
-    *   新增“一键标注”功能，简化标注流程。
-    *   新增“清理标注”功能，快速移除标注。
-*   **v2.2.0 :**
-    *   修复bug
-*   **v2.1.0 :**
+*   **v2.1.0 (当前版本):**
     *   新增"动物重命名"功能，包含预设 (Bird, Pigeon, Cow) 和命名格式 `mesh_special_[body_type]_[serial_number]`。
     *   新增"3Dcoat导出"功能，优化UV布局和材质通道，简化向3Dcoat的导出流程。
     *   更新GitHub的README，提供更详细的功能说明和使用指南。

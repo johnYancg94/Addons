@@ -1,0 +1,46 @@
+schema_version = "1.0.0"
+
+id = "poptools"
+version = "2.2.0"
+name = "Pop Tools"
+tagline = "Pop toolbag"
+maintainer = "Bradley Walker"
+type = "add-on"
+
+# Optional: Add URL to GitHub repo or documentation if available
+website = "https://github.com/johnYancg94/Addons/releases"
+
+tags = [
+  "tools"
+]
+
+blender_version_min = "4.2.0"
+# blender_version_max = "5.1.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2025 Bradley Walker"
+]
+
+# wheels = []
+
+# Declare necessary permissions
+[permissions]
+files = "Pop toolbag"
+
+# [build]
+# paths_exclude_pattern = []
+
+[features]
+workspace = true
+ui = true
+export = true
+import = false
+render = false
+object = true
+mesh = true
+sculpt = false
+texture = false
+animation = false

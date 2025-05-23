@@ -28,6 +28,7 @@ class MESH_PT_exporter_panel(Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "PopTools" # Match bl_info location
+    bl_order = 3
 
     # Helper functions
     def format_has_scale(self, format):

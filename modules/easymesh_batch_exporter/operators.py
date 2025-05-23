@@ -168,6 +168,7 @@ def create_export_copy(original_obj, context):
 def sanitise_filename(name):
     """
     Remove characters that are problematic in filenames.
+    Preserves Unicode characters like Chinese while removing invalid filename characters.
     
     Args:
         name (str): The name to sanitise.
@@ -175,8 +176,18 @@ def sanitise_filename(name):
     Returns:
         str: The sanitised name.
     """
-    # Replace invalid characters with underscores
+    # 仅替换Windows文件系统中不允许的字符，保留Unicode字符（如中文）
     sanitised = re.sub(r'[\\/:*?"<>|.]', '_', name)
+    
+    # 确保文件名编码正确
+    try:
+        # 尝试使用UTF-8编码，确保中文字符可以正确处理
+        sanitised.encode('utf-8').decode('utf-8')
+    except UnicodeError:
+        # 如果有编码问题，回退到ASCII安全的名称
+        logger.warning(f"文件名'{name}'包含无法编码的字符，将使用简化名称")
+        sanitised = f"object_{hash(name) % 10000:04d}"
+        
     return sanitised
 
 
@@ -694,6 +705,18 @@ def export_object(obj, file_path, scene_props):
     """
     fmt = scene_props.mesh_export_format
     success = False
+    
+    # 确保文件路径使用UTF-8编码，处理中文字符
+    try:
+        # 检查文件路径是否包含有效的UTF-8字符
+        file_path.encode('utf-8').decode('utf-8')
+    except UnicodeError:
+        # 如果路径有编码问题，使用对象名的哈希值创建安全的文件名
+        logger.warning(f"文件路径'{file_path}'包含无法编码的字符，将使用替代路径")
+        dir_path = os.path.dirname(file_path)
+        safe_name = f"object_{hash(obj.name) % 10000:04d}"
+        file_path = os.path.join(dir_path, safe_name)
+    
     # base_file_path = os.path.splitext(file_path)[0] # Ensure no extension yet
     base_file_path = file_path
     export_filepath = f"{base_file_path}.{fmt.lower()}"
@@ -734,22 +757,46 @@ def export_object(obj, file_path, scene_props):
                                 selected_objects=[obj]):
         try:
             if fmt == "FBX":
-                bpy.ops.export_scene.fbx(
-                    filepath=export_filepath,
-                    use_selection=True,
-                    global_scale=1.0, # Scale applied setup_export_object
-                    axis_forward=scene_props.mesh_export_coord_forward,
-                    axis_up=scene_props.mesh_export_coord_up,
-                    apply_unit_scale=False,
-                    apply_scale_options="FBX_SCALE_ALL",
-                    object_types={"MESH"},
-                    path_mode="COPY",
-                    embed_textures=scene_props.mesh_export_materials,
-                    use_materials=scene_props.mesh_export_materials,
-                    mesh_smooth_type=scene_props.mesh_export_smoothing,
-                    use_mesh_modifiers=False, # Handled by apply_mesh_modifiers
-                    use_triangles=False,      # Handled by triangulate_mesh
-                )
+                try:
+                    # 确保导出路径存在
+                    os.makedirs(os.path.dirname(export_filepath), exist_ok=True)
+                    
+                    fbx_export_params = {
+                        "filepath": export_filepath,
+                        "use_selection": True,
+                        "global_scale": 1.0, # Scale applied setup_export_object
+                        "axis_forward": scene_props.mesh_export_coord_forward,
+                        "axis_up": scene_props.mesh_export_coord_up,
+                        "apply_unit_scale": False,
+                        "apply_scale_options": "FBX_SCALE_ALL",
+                        "object_types": {"MESH"},
+                        "path_mode": "COPY",
+                        "embed_textures": False,  # 设置为False以避免嵌入纹理导致的问题
+                        "use_materials": scene_props.mesh_export_materials,
+                        "mesh_smooth_type": scene_props.mesh_export_smoothing,
+                        "use_mesh_modifiers": False, # Handled by apply_mesh_modifiers
+                        "use_triangles": False,      # Handled by triangulate_mesh
+                    }
+                    logger.info(f"Attempting FBX export with params: {fbx_export_params}")
+                    bpy.ops.export_scene.fbx(**fbx_export_params)
+
+                except Exception as fbx_e:
+                    logger.error(f"FBX导出错误详情: {type(fbx_e).__name__} - {str(fbx_e)}", exc_info=True)
+                    # 尝试使用备用方法导出
+                    logger.info("尝试使用备用方法导出FBX...")
+                    try:
+                        backup_fbx_params = {
+                            "filepath": export_filepath,
+                            "use_selection": True,
+                            "path_mode": "COPY",
+                            "embed_textures": False,
+                            "use_materials": False
+                        }
+                        logger.info(f"Attempting backup FBX export with params: {backup_fbx_params}")
+                        bpy.ops.export_scene.fbx(**backup_fbx_params)
+                    except Exception as backup_e:
+                        logger.error(f"备用FBX导出也失败: {type(backup_e).__name__} - {str(backup_e)}", exc_info=True)
+                        raise  # 重新抛出异常以便上层处理
             elif fmt == "OBJ":
                 bpy.ops.wm.obj_export(
                     filepath=export_filepath,

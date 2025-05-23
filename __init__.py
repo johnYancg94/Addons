@@ -10,7 +10,7 @@ This addon combines multiple tools including:
 bl_info = {
     "name": "PopTools",
     "author": "JhonYan & Claude & Gemini",
-    "version": (2, 2, 0),
+    "version": (2, 3, 0),
     "blender": (4, 2, 0),
     "location": "View3D > Sidebar > PopTools Tab",
     "description": "A collection of useful tools including Batch Mesh Exporter and ReTex.",
@@ -46,6 +46,7 @@ if modules_dir not in sys.path:
 
 # --- Module Imports will be handled dynamically in register/unregister ---
 from .modules import easymesh_batch_exporter # Ensure exporter module is imported
+from .modules import export_fbx # Ensure export_fbx module is imported
 
 def register():
     """Registers all addon classes and properties."""
@@ -110,11 +111,37 @@ def register():
     except Exception as e:
         print(f"Error registering Vertex to Bone Baker module: {e}")
 
+    # export_fbx module
+    try:
+        if ".modules.export_fbx" in sys.modules and "bpy" in locals():
+            importlib.reload(sys.modules[".modules.export_fbx"])
+            if ".modules.export_fbx.operators" in sys.modules: importlib.reload(sys.modules[".modules.export_fbx.operators"])
+            if ".modules.export_fbx.panels" in sys.modules: importlib.reload(sys.modules[".modules.export_fbx.panels"])
+            # Assuming properties and utils might be added later, commented out for now
+            # if ".modules.export_fbx.properties" in sys.modules: importlib.reload(sys.modules[".modules.export_fbx.properties"])
+            # if ".modules.export_fbx.utils" in sys.modules: importlib.reload(sys.modules[".modules.export_fbx.utils"])
+
+        from .modules.export_fbx import register as register_export_fbx_func
+        register_export_fbx_func()
+    except ImportError as e:
+        print(f"export_fbx module not found or could not be imported during register: {e}")
+    except Exception as e:
+        print(f"Error registering export_fbx module: {e}")
+
     print(f"Registered {bl_info['name']} Addon")
 
 def unregister():
     """Unregisters all addon classes and properties."""
     # Unregister in reverse order
+
+    # export_fbx module
+    try:
+        from .modules.export_fbx import unregister as unregister_export_fbx_func
+        unregister_export_fbx_func()
+    except ImportError:
+        print("export_fbx module (or its unregister function) not found during unregister.")
+    except Exception as e:
+        print(f"Error unregistering export_fbx module: {e}")
 
     # Vertex to Bone Baker module
     try:

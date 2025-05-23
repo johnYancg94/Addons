@@ -43,8 +43,7 @@ class RT_PT_TextureRenamerPanel(Panel):
         pack_box = layout.box()
         row = pack_box.row()
         row.operator("file.pack_all", text="打包贴图", icon='PACKAGE')
-        row.operator("rt.unpack_textures", text="解包贴图", icon='IMPORT')
-
+        
         # 添加分隔线
         layout.separator()
         
@@ -95,8 +94,6 @@ class RT_PT_TextureRenamerPanel(Panel):
         split = row.split(factor=0.3)
         split.label(text="序号:")
         split.prop(context.scene, "rt_character_serial_number", text="")
-
-
         op_decrease = row.operator("rt.adjust_serial_number", text="", icon='TRIA_LEFT')
         op_decrease.target_property = "rt_character_serial_number"
         op_decrease.delta = -1
@@ -105,14 +102,6 @@ class RT_PT_TextureRenamerPanel(Panel):
         op_increase.target_property = "rt_character_serial_number"
         op_increase.delta = 1
         op_increase.min_value = 1
-
-        # 添加后缀输入框
-        row = char_box.row(align=True)
-        split = row.split(factor=0.3)
-        split.label(text="后缀:")
-        split.prop(context.scene, "rt_character_suffix", text="")
-
-        
         
         row = char_box.row(align=True)
         row.operator("rt.rename_character_body", text="命名选中体型")
@@ -121,11 +110,6 @@ class RT_PT_TextureRenamerPanel(Panel):
         # 添加同步纹理命名按钮
         row = char_box.row(align=True)
         row.operator("rt.sync_texture_names", text="同步选中模型纹理命名", icon='FILE_REFRESH')
-
-        # 添加一键标注和清理标注按钮
-        row = char_box.row(align=True)
-        row.operator("rt.create_annotations", text="一键标注", icon='TEXT')
-        row.operator("rt.clear_annotations", text="清理标注", icon='TRASH')
 
         # 添加动物重命名部分
         layout.separator()
@@ -211,11 +195,7 @@ classes = (
 # 注册函数
 def register():
     for cls in classes:
-        try:
-            bpy.utils.register_class(cls)
-        except ValueError:
-            # 类可能已经被注册，忽略错误
-            pass
+        bpy.utils.register_class(cls)
     bpy.types.Scene.rt_uv_check_results = bpy.props.StringProperty(name="UV Check Results", default="")
     bpy.types.Scene.rt_uv_check_triggered = bpy.props.BoolProperty(name="UV Check Triggered", default=False)
 
@@ -223,11 +203,7 @@ def register():
 # 注销函数
 def unregister():
     for cls in reversed(classes):
-        try:
-            bpy.utils.unregister_class(cls)
-        except RuntimeError:
-            # 类可能已经被注销，忽略错误
-            pass
+        bpy.utils.unregister_class(cls)
     # 清理自定义属性
     if hasattr(bpy.types.Scene, 'rt_uv_check_results'):
         del bpy.types.Scene.rt_uv_check_results
